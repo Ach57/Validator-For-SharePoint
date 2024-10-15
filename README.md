@@ -11,3 +11,12 @@ Logging information:
   ```bash
     Date Time (DEBUG) Path: - info: 
   ```
+
+
+## Prerequirement:
+To run this program, you will need to have the following libraries:
+```bash
+openxlpy
+tkinter
+pandas
+```
