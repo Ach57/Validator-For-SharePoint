@@ -14,11 +14,17 @@ Logging information:
 
 
 ## Prerequirement:
-- To run this program, you will need to have the following libraries:
+- To run this program, you will need **Python 3.12** and to have the following libraries:
 ```bash
 openxlpy
 tkinter
 pandas
+```
+To install the libraries after obtaining **Python 3.12**
+```bash
+  pip install openxlpy
+  pip install tkinter
+  pip install pandas
 ```
 - Your Excel Report file exported
 
