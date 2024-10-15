@@ -14,9 +14,16 @@ Logging information:
 
 
 ## Prerequirement:
-To run this program, you will need to have the following libraries:
+- To run this program, you will need to have the following libraries:
 ```bash
 openxlpy
 tkinter
 pandas
 ```
+- Your Excel Report file exported
+
+## Running application:
+Follow these steps:
+-  Open the Terminal (cmd)
+-  Type: *cd Path_of_folder_with_main.py*
+-  Type: *main.py* 
