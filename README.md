@@ -6,6 +6,7 @@ This a GUI that displays the folders in Tree structure. Your Folders **must** be
 - Display the Folders in tree Structure
 - Search folder within folder
 - Flag Button to log information
+- logs information in both terminal and .log file
 
 Logging information:
   ```bash
@@ -16,6 +17,7 @@ Logging information:
 ## Prerequirement:
 - To run this program, you will need **Python 3.12** and to have the following libraries:
 ```bash
+colorlog
 openxlpy
 tkinter
 pandas
