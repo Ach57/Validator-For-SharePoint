@@ -4,6 +4,7 @@ from openpyxl import load_workbook
 import tkinter as tk
 import pandas as pd
 import logging
+import colorlog
 from tkinter import ttk
 from tkinter import messagebox, simpledialog
 from openpyxl.worksheet.worksheet import Worksheet
@@ -13,14 +14,51 @@ full_path =''
 num_of_files =''
 
 '''                 ---------   Logging configuration   ---------                   '''
+class Logger:
+    def __init__(self, logger_name='my_logger', log_file='app.log'):
+        # Create a logger
+        self.logger = logging.getLogger(logger_name)
+        self.logger.setLevel(logging.DEBUG)  # Ensure this is set to DEBUG
 
-logging.basicConfig( #Logging configuration
-    level=logging.DEBUG,
-    format='%(asctime)s (%(levelname)s) %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    filename='logs.txt',
-    filemode='a',
-)
+        # Create handlers for file and terminal
+        self._create_file_handler(log_file)
+        self._create_terminal_handler()
+
+    def _create_file_handler(self, log_file):
+        """Creates and adds a file handler to the logger."""
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setLevel(logging.DEBUG)  # Log everything to the file
+        file_formatter = logging.Formatter(
+                '%(asctime)s - [%(levelname)s] - %(message)s',
+                 datefmt='%Y-%m-%d %H:%M:%S'
+                    )
+        file_handler.setFormatter(file_formatter)
+        self.logger.addHandler(file_handler)
+
+    def _create_terminal_handler(self):
+        """Creates and adds a terminal handler with color support to the logger."""
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.DEBUG)  # Ensure this is set to DEBUG
+
+        colored_formatter = colorlog.ColoredFormatter(
+            "%(log_color)s[%(asctime)s] - [%(levelname)s] - %(message)s",
+            datefmt='%Y-%m-%d %H:%M:%S',
+            log_colors={
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'bold_red',
+            }
+        )
+        stream_handler.setFormatter(colored_formatter)
+        self.logger.addHandler(stream_handler)
+
+    def get_logger(self):
+        """Returns the logger instance."""
+        return self.logger
+
+custom_logger = Logger().get_logger()        
     
 def get_list_of_paths(df:pd.DataFrame) ->list:
     """_summary_
@@ -86,7 +124,7 @@ def build_tree(paths: list)->dict:
         dict: Tree_structure
     """
     tree_structure = {}
-    print('Building the Tree Structure . . .')
+    custom_logger.info('Building the Tree Structure . . .')
     
     for path in paths:
         components = path.split('/')
@@ -99,7 +137,7 @@ def build_tree(paths: list)->dict:
             
             current_level = current_level[component]
     
-    print("Tree Structure Built Successfully.")
+    custom_logger.info("Tree Structure Built Successfully.")
     return sort_tree(tree_structure)
 
 def get_full_path_of_selected(tree,item):
@@ -153,7 +191,7 @@ def flag_path():
     else:
         logged_message = f'Path: {full_path} - Number of files: {num_of_files}'
     
-    logging.debug(logged_message)
+    custom_logger.debug(logged_message)
     messagebox.showinfo('INFO','You flagged this item to logs.txt')
 
 
@@ -185,13 +223,18 @@ def on_key_search(event,searchEntry:tk.Entry,full_path:str, tree_structure:dict)
     
     searchEntry.config(bg='green' if match_found else 'red')
     
-        
+
+def on_closing(self:tk.Tk)->None:
+    custom_logger.info('User Terminated Program.')
+    self.destroy()
+      
 def create_gui(tree_structure, df: pd.DataFrame):
     global full_path
     
     root = tk.Tk()
     root.title("Folder Composition")
     root.geometry('1000x500')
+    root.protocol('WM_DELETE_WINDOW', lambda: on_closing(root))
 
     # Create a frame to hold the treeview and the scrollbar
     frame = tk.Frame(root)
@@ -246,14 +289,15 @@ def main() -> int:
     Returns:
         int: return 0 for good and 1 for bad
     """
+    custom_logger.info('User ran the Program.')
     file_name = input('Enter the file name: ')
     
     try:
         workBook = load_workbook(file_name)
         workSheet = workBook.active
     except Exception as e:
-        print(e)
-        print('Program will terminate . . . ')
+        custom_logger.critical(e)
+        custom_logger.error('Program will terminate . . . ')
         return 1
     
     data = workSheet.values
@@ -272,6 +316,7 @@ def main() -> int:
 
 if __name__ =="__main__": 
     main()
+    
     
 
     
