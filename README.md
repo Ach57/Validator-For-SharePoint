@@ -30,6 +30,7 @@ To install the libraries after obtaining **Python 3.12**
   pip install openxlpy
   pip install tkinter
   pip install pandas
+  pip install colorlog
 ```
 - Your Excel Report file exported
 
