@@ -38,4 +38,9 @@ To install the libraries after obtaining **Python 3.12**
 Follow these steps:
 -  Open the Terminal (cmd)
 -  Type: *cd Path_of_folder_with_main.py*
--  Type: *main.py* 
+-  Type: *main.py*
+
+## Sample Display:
+<img width="749" alt="Display" src="https://github.com/user-attachments/assets/2cb9622b-44e5-499c-917e-d3de334e8488">
+
+
